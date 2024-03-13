@@ -6,6 +6,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -16,7 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 @Component
 
-public class jwtAuthenticationFilter<usernamepasswordAuthenticationToken> extends OncePerRequestFilter {
+public class jwtAuthenticationFilter extends OncePerRequestFilter {
     
     @Override
     protected void doFilterInternal(
@@ -39,13 +40,16 @@ public class jwtAuthenticationFilter<usernamepasswordAuthenticationToken> extend
         final boolean istokenValid; // TODO tobe implemented
         if (istokenValid) {
           
+          Object credential;
           UsernamePasswordAuthenticationToken authToken = 
-          new UsernamePasswordAuthenticationToken(userDetails,credentialsznull);
+          new UsernamePasswordAuthenticationToken(userDetails,credential:null, userDetails.getAuthorities());
+          jwtToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+          SecurityContextHolder.getContext().setAuthentication(authToken);
            
           
         }
       }
-
+filterChain.doFilter(request, response);
       }
     
        
